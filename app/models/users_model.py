@@ -9,11 +9,13 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False, unique=True)
     username = Column(String(50), nullable=False, unique=True)
     email = Column(String(100), nullable=False, unique=True)
     password_hash = Column(String(255), nullable=False)
     created_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
     updated_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'))
+    role_id = Column(Integer,nullable=False)
 
     # Many-to-many relationship through user_roles association table
     roles = relationship('Role', secondary=user_roles, back_populates='users')

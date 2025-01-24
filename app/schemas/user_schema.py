@@ -7,3 +7,4 @@ class UserLogin(BaseModel):
 class UserCreate(UserLogin):
     email: str
     role_name: str
+    name:str

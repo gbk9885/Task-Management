@@ -29,12 +29,13 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
 
     # You can add password hashing here
     hashed_password = hash_password(user.password)
-    user_db = User(username=user.username, email=user.email, password_hash=hashed_password)
+    
+    # Retrieve the role (e.g., 'user' role, could be dynamic)
+    role = db.query(Role).filter(func.lower(Role.name) == func.lower(user.role_name)).first() # Or assign a specific role dynamically
+    user_db = User(username=user.username, email=user.email, password_hash=hashed_password,name=user.name,role_id=role.id)
     db.add(user_db)
     db.commit()
     db.refresh(user_db)
-    # Retrieve the role (e.g., 'user' role, could be dynamic)
-    role = db.query(Role).filter(func.lower(Role.name) == func.lower(user.role_name)).first() # Or assign a specific role dynamically
 
     if not role:
         raise Exception("Role not found")

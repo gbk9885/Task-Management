@@ -29,9 +29,20 @@ def upgrade():
         (2, 'Manager', 'Manager role with content management permissions'),
         (3, 'User', 'User role with read-only access')
     """)
+    op.add_column('users',
+       sa.Column('role_id', sa.BigInteger(), nullable=True)
+    )
+    op.create_foreign_key(
+       'fk_user_role_id',
+       'users', 'roles',
+       ['role_id'], ['id']
+    )
+
 
 def downgrade():
     op.execute("DELETE FROM tasks WHERE id BETWEEN 1 AND 10")
     op.execute("DELETE FROM user_roles WHERE user_id BETWEEN 1 AND 10")
     op.execute("DELETE FROM roles WHERE id BETWEEN 1 AND 3")
     op.execute("DELETE FROM users WHERE id BETWEEN 1 AND 10")
+    op.drop_constraint('fk_user_role_id', 'users', type_='foreignkey')
+    op.drop_column('users', 'role_id')

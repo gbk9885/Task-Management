@@ -21,13 +21,13 @@ def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
 
     return {"tasks": tasks}
 
-@router.get("/")
+@router.get("")
 def get_users(db: Session = Depends(get_db)):
     # Fetch all users
     users = db.query(User).all()
 
     if not users:
         raise HTTPException(status_code=404, detail="No users found")
-
+    
     return {"users": users}
 
